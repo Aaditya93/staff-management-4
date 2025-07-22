@@ -539,15 +539,15 @@ EXAMPLE: If PDF contains "Radisson Hotel Danang" and "Radisson Resort Phu Quoc",
     // Track end time and log duration
     const endTime = Date.now();
     const durationMs = endTime - startTime;
-    console.log(`AI action time taken: ${durationMs} ms`);
+    // console.log(`AI action time taken: ${durationMs} ms`);
 
     // Log token usage if available
-    if (result.response.usageMetadata) {
-      console.log("AI token usage:", result.response.usageMetadata);
-    }
+    // if (result.response.usageMetadata) {
+    //   console.log("AI token usage:", result.response.usageMetadata);
+    // }
 
     const responseText = result.response.text();
-    console.log("Raw AI response:", responseText);
+    // console.log("Raw AI response:", responseText);
 
     if (!responseText || responseText.trim() === "") {
       throw new Error("Empty response from AI model");
