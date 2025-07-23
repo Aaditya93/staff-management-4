@@ -22,3 +22,17 @@ jobs:
         mkdir -p ~/.ssh
         cp known_hosts ~/.ssh/known_hosts
         ssh -t -i keyfile ubuntu@ec2-54-179-188-93.ap-southeast-1.compute.amazonaws.com 
+    - name: Run deployment script
+      run: |
+        sudo pm2 delete all 
+        cd staff-management-4
+        git pull origin main
+        npm install
+        sudo pm2 start ecosystem.config.js --env production
+
+    - name: Clean up
+      run: |
+        rm -f keyfile
+        rm -f ~/.ssh/known_hosts
+
+       
