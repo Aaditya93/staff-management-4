@@ -24,11 +24,13 @@ jobs:
         ssh -t -i keyfile ubuntu@ec2-54-179-188-93.ap-southeast-1.compute.amazonaws.com 
     - name: Run deployment script
       run: |
-        sudo pm2 delete all 
-        cd staff-management-4
-        git pull origin main
-        npm install
-        sudo pm2 start ecosystem.config.js --env production
+        ssh -i keyfile -o StrictHostKeyChecking=no ubuntu@ec2-54-179-188-93.ap-southeast-1.compute.amazonaws.com << 'EOF'
+          cd staff-management-4
+          git pull origin main
+          npm install
+          sudo pm2 delete all || true
+          sudo pm2 start ecosystem.config.js --env production
+        EOF
 
     - name: Clean up
       run: |
