@@ -416,7 +416,7 @@ Rules:
 - Extra bed prices may vary between different room categories and hotels, so carefully check each room category and hotel for their specific extra bed pricing.
 - Separate roomCategories for each room type/pricing period
 - If not mentioned, leave it out. Extract extraBed prices: check if extra bed is available for that room category, and look for "Extrabed", "Extra bed".
-- Extract surcharges: look for "Surcharge", "Phụ thu", holiday fees, festival charges, child policies. Do not include additional charges for optional services (e.g., extra services that are only charged if requested). Surcharges should only represent mandatory additional charges on the room rate during holidays or special periods.
+- Extract surcharges: look for "Surcharge", "Phụ thu", holiday fees, festival charges, child policies. Do not add Gala dinnar as a surcharge Do not include additional charges for optional services (e.g., extra services that are only charged if requested). Surcharges should only represent mandatory additional charges on the room rate during holidays or special periods.
 - Return valid JSON only
 - Return in English language
 
