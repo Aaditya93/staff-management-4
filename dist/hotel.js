@@ -74,6 +74,10 @@ const GalaDinnerSchema = new mongoose_1.Schema({
     childAgeRange: {
         type: String,
     },
+    note: {
+        type: String,
+        trim: true,
+    }
 }, { _id: false });
 const HotelSchema = new mongoose_1.Schema({
     supplierId: {
@@ -105,6 +109,10 @@ const HotelSchema = new mongoose_1.Schema({
             type: String,
             trim: true,
         },
+        note: {
+            type: String,
+            trim: true,
+        },
     },
     fullBoard: {
         child: {
@@ -115,6 +123,10 @@ const HotelSchema = new mongoose_1.Schema({
             trim: true,
         },
         childAgeRange: {
+            type: String,
+            trim: true,
+        },
+        note: {
             type: String,
             trim: true,
         },
@@ -132,6 +144,10 @@ const HotelSchema = new mongoose_1.Schema({
             type: String,
             trim: true,
         },
+        note: {
+            type: String,
+            trim: true,
+        },
     },
     allInclusive: {
         child: {
@@ -143,6 +159,10 @@ const HotelSchema = new mongoose_1.Schema({
             trim: true,
         },
         childAgeRange: {
+            type: String,
+            trim: true,
+        },
+        note: {
             type: String,
             trim: true,
         },
@@ -220,7 +240,14 @@ const HotelSchema = new mongoose_1.Schema({
         index: true,
         min: 0,
     },
+    minNights: {
+        type: Number,
+    },
     fitGitCondition: {
+        type: String,
+        trim: true,
+    },
+    link: {
         type: String,
         trim: true,
     },

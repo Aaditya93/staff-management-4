@@ -75,6 +75,7 @@ const createHotels = (input) => __awaiter(void 0, void 0, void 0, function* () {
                             child: hotelData.allInclusive.child,
                             adult: hotelData.allInclusive.adult,
                             childAgeRange: hotelData.allInclusive.childAgeRange,
+                            note: hotelData.allInclusive.note, // Optional, can be added later  
                         }
                         : undefined,
                     fullBoard: hotelData.fullBoard
@@ -82,6 +83,7 @@ const createHotels = (input) => __awaiter(void 0, void 0, void 0, function* () {
                             child: hotelData.fullBoard.child,
                             adult: hotelData.fullBoard.adult,
                             childAgeRange: hotelData.fullBoard.childAgeRange,
+                            note: hotelData.fullBoard.note, // Optional, can be added later
                         }
                         : undefined,
                     halfBoard: hotelData.halfBoard
@@ -89,6 +91,7 @@ const createHotels = (input) => __awaiter(void 0, void 0, void 0, function* () {
                             child: hotelData.halfBoard.child,
                             adult: hotelData.halfBoard.adult,
                             childAgeRange: hotelData.halfBoard.childAgeRange,
+                            note: hotelData.halfBoard.note, // Optional, can be added later
                         }
                         : undefined,
                     breakfast: hotelData.breakfast
@@ -97,6 +100,7 @@ const createHotels = (input) => __awaiter(void 0, void 0, void 0, function* () {
                             adult: hotelData.breakfast.adult,
                             childAgeRange: hotelData.breakfast.childAgeRange,
                             noofChildren: hotelData.breakfast.noofChildren,
+                            note: hotelData.breakfast.note, // Optional, can be added later
                         }
                         : undefined,
                     season: hotelData.season,

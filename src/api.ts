@@ -15,6 +15,7 @@ export interface GalaDinnerData {
   child?: number;
   date?: string;
   childAgeRange?: string;
+  note?: string; // Optional, can be added later
   description?: string; // e.g., "Christmas gala dinner"
 }
 function parseDDMMYYYY(dateStr: string): Date | undefined {
@@ -51,23 +52,27 @@ export interface HotelData {
     child?: number; // Optional, can be added later
     adult?: number; // Optional, can be added later
     childAgeRange?: string; // Optional, can be added later
+    note?: string; // Optional, can be added later
   };
   halfBoard?: {
     child?: number; // Optional, can be added later
     adult?: number; // Optional, can be added later     
 
     childAgeRange?: string; // Optional, can be added later
+    note?: string; // Optional, can be added later
   };
   allInclusive?: {
     child?: number; // Optional, can be added later
     adult?: number; // Optional, can be added later
     childAgeRange?: string; // Optional, can be added later
+    note?: string; // Optional, can be added later
   };
   breakfast?: {
     child?: number; // Optional, can be added later
     adult?: number; // Optional, can be added later
     childAgeRange?: string; // Optional, can be added later   
     noofChildren?: number; // Optional, can be added later
+    note?: string; // Optional, can be added later
   };
   maxOccupancy?: string; // Optional, can be added later
   season?: string; // Optional, can be added later
@@ -160,7 +165,8 @@ export const createHotels = async (
             ? {
                 child: hotelData.allInclusive.child ,
                 adult: hotelData.allInclusive.adult ,
-                childAgeRange: hotelData.allInclusive.childAgeRange ,   
+                childAgeRange: hotelData.allInclusive.childAgeRange , 
+                note: hotelData.allInclusive.note, // Optional, can be added later  
               } 
             : undefined,
           fullBoard: hotelData.fullBoard
@@ -168,6 +174,7 @@ export const createHotels = async (
                 child: hotelData.fullBoard.child ,
                 adult: hotelData.fullBoard.adult ,
                 childAgeRange: hotelData.fullBoard.childAgeRange ,
+                note: hotelData.fullBoard.note, // Optional, can be added later
               }
             : undefined,
           halfBoard: hotelData.halfBoard
@@ -175,6 +182,7 @@ export const createHotels = async (
                 child: hotelData.halfBoard.child ,      
                 adult: hotelData.halfBoard.adult ,
                 childAgeRange: hotelData.halfBoard.childAgeRange ,
+                note: hotelData.halfBoard.note, // Optional, can be added later
               }
             : undefined,
           breakfast: hotelData.breakfast
@@ -183,6 +191,7 @@ export const createHotels = async (
                 adult: hotelData.breakfast.adult ,
                 childAgeRange: hotelData.breakfast.childAgeRange ,
                 noofChildren: hotelData.breakfast.noofChildren ,
+                note: hotelData.breakfast.note, // Optional, can be added later
               }
             : undefined,
           season : hotelData.season ,

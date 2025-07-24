@@ -1,3 +1,4 @@
+import { notEqual } from "assert";
 import mongoose, { Document, Schema, Model } from "mongoose";
 
 export interface IExtraBed {
@@ -12,8 +13,9 @@ export interface IGalaDinner {
   child?: number;
   date?: string;
   description?: string; // e.g., "Christmas gala dinner"
-
   childAgeRange?: string; // e.g., "0-12 years"
+  note?: string; // Optional, can be added later
+  
 }
 
 export interface ISurcharge {
@@ -30,27 +32,31 @@ export interface IHotel extends Document {
   country: string;
   maxOccupancy?: string; 
   reservationEmail?: string; 
+  minNights?: number; // Optional, can be added later
   allInclusive?: {
     child?: number; 
     adult?: number; 
     childAgeRange?: string; 
+    note?: string; // Optional, can be added later
   };
   breakfast?: {
     child?: number; 
     adult?: number;
-
     childAgeRange?: string; 
+    note?: string; // Optional, can be added later
 
   };
   fullBoard?: {
     child?: number; 
     adult?: number; 
     childAgeRange?: string; 
+    note?: string; // Optional, can be added later
   };
   halfBoard?: {
     child?: number;
     adult?: number;
     childAgeRange?: string; 
+    note?: string; // Optional, can be added later
 
   };
   vat?: number; // Optional, can be added later
@@ -70,12 +76,12 @@ export interface IHotel extends Document {
   domesticPrice: number;
   extraBed: IExtraBed;
   meals: string;
-   noofChildren: number; // Optional, can be added later
+  noofChildren: number; // Optional, can be added later
   galaDinner?: IGalaDinner[];
   promotions: string[];
   isActive?: boolean;
   fitGitCondition?: string; // Optional, can be added later
-
+  link: string; // Optional, can be added later
   ratings?: Array<{
     userId: string;
     score: number;
@@ -143,6 +149,10 @@ const GalaDinnerSchema = new Schema(
     childAgeRange: {
       type: String,
     },
+    note:{
+      type: String,
+      trim: true,
+    }
   },
   { _id: false }
 );
@@ -180,6 +190,10 @@ const HotelSchema: Schema = new Schema(
         type: String,
         trim: true,   
       },
+      note: {
+        type: String,
+        trim: true,
+      },  
      
     },  
     fullBoard: {
@@ -191,6 +205,10 @@ const HotelSchema: Schema = new Schema(
         trim: true, 
       },
       childAgeRange: {
+        type: String,
+        trim: true,
+      },
+      note: {
         type: String,
         trim: true,
       },
@@ -208,6 +226,10 @@ const HotelSchema: Schema = new Schema(
         type: String,
         trim: true,
       },
+      note: {
+        type: String,
+        trim: true,
+      },
     },
     allInclusive: {
       child: {
@@ -219,6 +241,10 @@ const HotelSchema: Schema = new Schema(
         trim: true,
       },
       childAgeRange: {
+        type: String,
+        trim: true,
+      },
+      note: {
         type: String,
         trim: true,
       },
@@ -305,9 +331,17 @@ const HotelSchema: Schema = new Schema(
       index: true,
       min: 0,
     },
+    minNights: {
+      type: Number,
+ 
+    },
     fitGitCondition: {
       type: String,
       trim: true,   
+    },
+    link: {
+      type: String,
+      trim: true,
     },
     extraBed: {
       type: ExtraBedSchema,

@@ -101,9 +101,13 @@ const generationConfig = {
                         description: {
                           type: "string",
                           description: "Description of gala dinner including any special conditions or inclusions (e.g., 'Christmas gala dinner', 'New Year gala dinner')",
-                        }
+                        },
+                        note: {
+                          type: "string",
+                          description: "Optional note for gala dinner. Extra important information (e.g., 'Advance booking required', 'FOC for 0-6 children', 'FOC separate meal for 0-5.99 years'). Always extract and include any information about free meals (FOC), complimentary services, or special notes for children/infants"
+                        },
                       },
-                      required: ["adult", "child", "date" ,"description"],
+                      required: ["adult", "child", "date" ,"description","childAgeRange", "note"],
                     },
                     description: "Array of gala dinner information objects - only include if explicitly mentioned in the document"
                   },
@@ -121,6 +125,10 @@ const generationConfig = {
                       childAgeRange: {
                         type: "string",
                         description: "Age range for children breakfast pricing (e.g., '0-12 years')",
+                      },
+                        note: {
+                        type: "string",
+                        description: "Optional note for breakfast. Extra important information (e.g., 'FOC for 0-6 children', 'FOC separate meal for 0-5.99 years'). Always extract and include any information about free meals (FOC), complimentary services, or special notes for children/infants."
                       },
                     },
                     description: "Breakfast pricing information - only include if explicitly mentioned in the document",
@@ -140,6 +148,10 @@ const generationConfig = {
                         type: "string",
                         description: "Age range for children full board pricing (e.g., '0-12 years')",
                       },
+                      note: {
+                        type: "string",
+                        description: "Optional note for full board. Extra important information (e.g., 'FOC for 0-6 children', 'FOC separate meal for 0-5.99 years'). Always extract and include any information about free meals (FOC), complimentary services, or special notes for children/infants."
+                      },
                     },
                     description: "Full board pricing information - only include if explicitly mentioned in the document",
                   },
@@ -158,6 +170,11 @@ const generationConfig = {
                         type: "string",
                         description: "Age range for children half board pricing (e.g., '0-12 years')",
                       },
+                      note: {
+                        type: "string",
+                        description: "Optional note for half board. Extra important information (e.g., 'FOC for 0-6 children', 'FOC separate meal for 0-5.99 years'). Always extract and include any information about free meals (FOC), complimentary services, or special notes for children/infants."
+                      },
+
                     },
                     description: "Half board pricing information - only include if explicitly mentioned in the document",
                   },
@@ -176,6 +193,11 @@ const generationConfig = {
                         type: "string",
                         description: "Age range for children all-inclusive pricing (e.g., '0-12 years')",
                       },
+                       note: {
+                        type: "string",
+                        description: "Optional note for All-inclusive. Extra important information (e.g., 'FOC for 0-6 children', 'FOC separate meal for 0-5.99 years'). Always extract and include any information about free meals (FOC), complimentary services, or special notes for children/infants."
+                      },
+
                     },  
                     description: "All-inclusive pricing information - only include if explicitly mentioned in the document",  
                   },
@@ -433,6 +455,7 @@ Rules:
 - Separate roomCategories for each room type/pricing period
 - If not mentioned, leave it out. Extract extraBed prices: check if extra bed is available for that room category, and look for "Extrabed", "Extra bed".
 - Extract surcharges: look for "Surcharge", "Phụ thu", holiday fees, festival charges, child policies. Do not add Gala dinnar as a surcharge Do not include additional charges for optional services (e.g., extra services that are only charged if requested). Surcharges should only represent mandatory additional charges on the room rate during holidays or special periods.
+- For the note field in galaDinner, breakfast, fullBoard, halfBoard, and allInclusive: Always extract and include any information about free meals (FOC), complimentary services, or special notes for children/infants, especially for age ranges like 0-6, 0-5.99, 6-11.99, etc. Examples: "FOC for 0-6 children", "FOC separate meal for 0-5.99 years".
 - Return valid JSON only
 - Return in English language
 
@@ -459,30 +482,37 @@ EXAMPLE: If PDF contains "Radisson Hotel Danang" and "Radisson Resort Phu Quoc",
                        "allInclusive": {
                           "child": 150000,
                           "adult": 300000,
-                          "childAgeRange": "0-12 years"
+                          "childAgeRange": "0-12 years",
+                          "note": "FOC for 0-6 children, FOC separate meal for 0-5.99 years"
                         },
                       
                         "breakfast": {
                           "child": 100000,   
                           "adult": 200000, 
                           "childAgeRange": "0-12 years",
+                          "note": "FOC for 0-6 children, FOC separate meal for 0-5.99 years"
                         },
                         "fullBoard": {
                           "child": 200000,      
                           "adult": 400000,
-                          "childAgeRange": "0-12 years"
+                          "childAgeRange": "0-12 years",
+                          "note": "FOC for 0-6 children, FOC separate meal for 0-5.99 years"
                         },
                         "halfBoard": {
                           "child": 150000,      
                           "adult": 300000,
-                          "childAgeRange": "0-12 years"
+                          "childAgeRange": "0-12 years",
+                          "note": "FOC for 0-6 children, FOC separate meal for 0-5.99 years"
+
                         },
                        "galaDinner": [
                       {
                         "adult": 500000,
                         "child": 250000,
                         "date": "01-01-2025",
-                        "description": "New Year gala dinner"
+                        "description": "New Year gala dinner",
+                        "childAgeRange": "0-12 years",
+                        "note": "FOC for 0-6 children, FOC separate meal for 0-5.99 years"
                       },
                        "extraBed": {
                           "adult": 300000,
