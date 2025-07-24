@@ -1,6 +1,6 @@
-// @ts-nocheck
-import express from "express";
 
+import express from "express";
+import HotelRequest from "./HotelRequest";
 import { createHotels, CreateHotelsInput } from "./api";
 import multer from "multer";
 import { extractHotelData } from "./ai";
@@ -74,40 +74,66 @@ app.get("/", (req, res) => {
 // API route for creating hotels
 app.post("/hotels", upload.single("file"), async (req, res) => {
   try {
-    const { supplierId, country, city, currency,createdBy,stars,requestId } = req.body;
+    const { supplierId, country, city, currency, createdBy, stars, requestId, fileUrl } = req.body;
     const file = req.file;
 
-    if (!file || !supplierId || !country || !city || !currency || !createdBy || !requestId || !stars) {
+    if (!file || !supplierId || !country || !city || !currency || !createdBy || !requestId || !stars || !fileUrl) {
       return res
         .status(400)
         .json({ success: false, message: "Missing required fields or file" });
     }
 
-   
-    // Pass the required parameters to extractHotelData, but do not await it
-    extractHotelData(
-      file.path,
-      supplierId,
-      country,
-      city,
-      currency,
-      requestId,
-      createdBy,
-      stars
-    ).catch((error) => {
-      console.error("Error in background hotel extraction:", error);
-    });
-
-    // Immediately respond to the client that processing has started
+    // Immediately respond to the client
     res.status(202).json({
       success: true,
       message: "Hotel data extraction and processing has started. You will be notified when it is complete.",
       timestamp: new Date().toISOString(),
     });
+
+    // Process in background with proper error handling
+    setImmediate(async () => {
+      try {
+        await extractHotelData(
+          file.path,
+          supplierId,
+          country,
+          city,
+          currency,
+          requestId,
+          createdBy,
+          stars,
+          fileUrl
+        );
+        // console.log(`✅ Successfully processed hotel data for request ${requestId}`);
+      } catch (error) {
+        console.error(`❌ Error in background hotel extraction for request ${requestId}:`, error);
+        
+        // Clean up the uploaded file on error
+        try {
+          if (file && file.path && fs.existsSync(file.path)) {
+            fs.unlinkSync(file.path);
+          }
+        } catch (cleanupError) {
+          console.error("Error cleaning up file:", cleanupError);
+        }
+
+        // Update request status to failed (optional)
+        try {
+          await HotelRequest.findByIdAndUpdate(
+            requestId,
+            { isComplete: true, hasError: true, errorMessage: error },
+            { new: true }
+          );
+        } catch (dbError) {
+          console.error("Error updating request status:", dbError);
+        }
+      }
+    });
+
   } catch (error) {
     console.error("Error in /hotels endpoint:", error);
 
-    // Clean up the uploaded file on error (backup cleanup)
+    // Clean up the uploaded file on error
     if (req.file) {
       try {
         fs.unlinkSync(req.file.path);
@@ -119,7 +145,7 @@ app.post("/hotels", upload.single("file"), async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Internal server error",
-      details: error.message,
+      details: error,
       timestamp: new Date().toISOString(),
     });
   }
@@ -163,7 +189,7 @@ if (useSSL) {
         // In production, fall back to HTTP instead of exiting
         console.log("⚠️  Starting HTTP server as fallback...");
         startHttpServer();
-        return;
+
       } else {
         console.log("🔧 Development mode: Creating self-signed certificates...");
         
@@ -180,7 +206,7 @@ if (useSSL) {
           console.error("❌ Failed to create SSL certificates:", certError);
           console.log("⚠️  Falling back to HTTP server...");
           startHttpServer();
-          return;
+
         }
       }
     } else {

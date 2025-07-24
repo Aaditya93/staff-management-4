@@ -35,7 +35,7 @@ const createHotels = (input) => __awaiter(void 0, void 0, void 0, function* () {
             };
         }
         yield (0, db_1.default)();
-        const { hotels, supplierId, country, city, currency, createdBy } = input;
+        const { hotels, supplierId, country, city, currency, createdBy, fileUrl } = input;
         if (!hotels || !Array.isArray(hotels) || hotels.length === 0) {
             return {
                 success: false,
@@ -62,6 +62,7 @@ const createHotels = (input) => __awaiter(void 0, void 0, void 0, function* () {
                     domesticPrice: hotelData.domesticPrice,
                     fitPrice: hotelData.fitPrice,
                     gitPrice: hotelData.gitPrice,
+                    minNights: hotelData.minNights, // Default to 0 if not provided
                     fitGitCondition: hotelData.fitGitCondition,
                     currency: currency || hotelData.currency,
                     reservationEmail: hotelData.reservationEmail,
@@ -75,7 +76,7 @@ const createHotels = (input) => __awaiter(void 0, void 0, void 0, function* () {
                             child: hotelData.allInclusive.child,
                             adult: hotelData.allInclusive.adult,
                             childAgeRange: hotelData.allInclusive.childAgeRange,
-                            note: hotelData.allInclusive.note, // Optional, can be added later  
+                            note: hotelData.allInclusive.note
                         }
                         : undefined,
                     fullBoard: hotelData.fullBoard
@@ -83,7 +84,7 @@ const createHotels = (input) => __awaiter(void 0, void 0, void 0, function* () {
                             child: hotelData.fullBoard.child,
                             adult: hotelData.fullBoard.adult,
                             childAgeRange: hotelData.fullBoard.childAgeRange,
-                            note: hotelData.fullBoard.note, // Optional, can be added later
+                            note: hotelData.fullBoard.note
                         }
                         : undefined,
                     halfBoard: hotelData.halfBoard
@@ -91,7 +92,7 @@ const createHotels = (input) => __awaiter(void 0, void 0, void 0, function* () {
                             child: hotelData.halfBoard.child,
                             adult: hotelData.halfBoard.adult,
                             childAgeRange: hotelData.halfBoard.childAgeRange,
-                            note: hotelData.halfBoard.note, // Optional, can be added later
+                            note: hotelData.halfBoard.note
                         }
                         : undefined,
                     breakfast: hotelData.breakfast
@@ -100,10 +101,11 @@ const createHotels = (input) => __awaiter(void 0, void 0, void 0, function* () {
                             adult: hotelData.breakfast.adult,
                             childAgeRange: hotelData.breakfast.childAgeRange,
                             noofChildren: hotelData.breakfast.noofChildren,
-                            note: hotelData.breakfast.note, // Optional, can be added later
+                            note: hotelData.breakfast.note
                         }
                         : undefined,
                     season: hotelData.season,
+                    link: fileUrl,
                     maxOccupancy: hotelData.maxOccupancy,
                     childPolicies: hotelData.childPolicies,
                     markets: hotelData.markets,
@@ -119,7 +121,7 @@ const createHotels = (input) => __awaiter(void 0, void 0, void 0, function* () {
                 };
                 // Create new hotel room category record
                 const result = yield hotel_1.default.create(hotelDocument);
-                // console.log("Created hotel record:", result);
+                // console.log("Hotel Document:", result);
                 newRecords++;
             }
             catch (error) {

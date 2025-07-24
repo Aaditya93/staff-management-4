@@ -1,4 +1,3 @@
-import { notEqual } from "assert";
 import mongoose, { Document, Schema, Model } from "mongoose";
 
 export interface IExtraBed {

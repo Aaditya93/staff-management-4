@@ -3,6 +3,7 @@
 
 import dbConnect from "./db";
 import Hotel from "./hotel";
+import { link } from "fs";
 
 export interface ExtraBedData {
   adult: number;
@@ -15,8 +16,8 @@ export interface GalaDinnerData {
   child?: number;
   date?: string;
   childAgeRange?: string;
-  note?: string; // Optional, can be added later
   description?: string; // e.g., "Christmas gala dinner"
+  note?: string; // Optional, can be added later  
 }
 function parseDDMMYYYY(dateStr: string): Date | undefined {
   if (!dateStr) return undefined;
@@ -46,6 +47,7 @@ export interface HotelData {
   fitGitCondition?: string; // Optional, can be added later
   inboundPrice: number; // Optional, can be added later
   domesticPrice: number; // Optional, can be added later
+  minNights?: number; // Optional, can be added later
   currency?: string;
   reservationEmail?: string; // Optional, can be added later
   fullBoard?: {
@@ -73,6 +75,7 @@ export interface HotelData {
     childAgeRange?: string; // Optional, can be added later   
     noofChildren?: number; // Optional, can be added later
     note?: string; // Optional, can be added later
+
   };
   maxOccupancy?: string; // Optional, can be added later
   season?: string; // Optional, can be added later
@@ -95,6 +98,7 @@ export interface CreateHotelsInput {
   city?: string;
   currency?: string;
   createdBy?: string; // Optional, can be used for tracking
+  fileUrl?: string; // Optional, can be used for tracking
 }
 
 export interface CreateHotelsResult {
@@ -120,7 +124,7 @@ export const createHotels = async (
 
     await dbConnect();
 
-    const { hotels, supplierId, country, city, currency, createdBy } = input;
+    const { hotels, supplierId, country, city, currency, createdBy,  fileUrl} = input;
 
     if (!hotels || !Array.isArray(hotels) || hotels.length === 0) {
       return {
@@ -152,6 +156,7 @@ export const createHotels = async (
           domesticPrice: hotelData.domesticPrice ,
           fitPrice: hotelData.fitPrice ,
           gitPrice: hotelData.gitPrice ,
+          minNights: hotelData.minNights , // Default to 0 if not provided
           fitGitCondition: hotelData.fitGitCondition,
           currency: currency || hotelData.currency,
           reservationEmail: hotelData.reservationEmail ,
@@ -165,8 +170,8 @@ export const createHotels = async (
             ? {
                 child: hotelData.allInclusive.child ,
                 adult: hotelData.allInclusive.adult ,
-                childAgeRange: hotelData.allInclusive.childAgeRange , 
-                note: hotelData.allInclusive.note, // Optional, can be added later  
+                childAgeRange: hotelData.allInclusive.childAgeRange ,   
+                note : hotelData.allInclusive.note
               } 
             : undefined,
           fullBoard: hotelData.fullBoard
@@ -174,7 +179,7 @@ export const createHotels = async (
                 child: hotelData.fullBoard.child ,
                 adult: hotelData.fullBoard.adult ,
                 childAgeRange: hotelData.fullBoard.childAgeRange ,
-                note: hotelData.fullBoard.note, // Optional, can be added later
+                note : hotelData.fullBoard.note
               }
             : undefined,
           halfBoard: hotelData.halfBoard
@@ -182,7 +187,7 @@ export const createHotels = async (
                 child: hotelData.halfBoard.child ,      
                 adult: hotelData.halfBoard.adult ,
                 childAgeRange: hotelData.halfBoard.childAgeRange ,
-                note: hotelData.halfBoard.note, // Optional, can be added later
+                note : hotelData.halfBoard.note
               }
             : undefined,
           breakfast: hotelData.breakfast
@@ -191,11 +196,11 @@ export const createHotels = async (
                 adult: hotelData.breakfast.adult ,
                 childAgeRange: hotelData.breakfast.childAgeRange ,
                 noofChildren: hotelData.breakfast.noofChildren ,
-                note: hotelData.breakfast.note, // Optional, can be added later
+                note : hotelData.breakfast.note
               }
             : undefined,
           season : hotelData.season ,
-
+          link: fileUrl,
           maxOccupancy: hotelData.maxOccupancy ,
           childPolicies: hotelData.childPolicies ,
           markets: hotelData.markets ,
@@ -212,7 +217,9 @@ export const createHotels = async (
 
         // Create new hotel room category record
         const result = await Hotel.create(hotelDocument);
-// console.log("Created hotel record:", result);
+
+        // console.log("Hotel Document:", result);
+
  
 
         newRecords++;
