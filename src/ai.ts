@@ -393,6 +393,12 @@ const extractHotelInfo = async (uploadedFile: any) => {
 **surcharge:** Mandatory additional charges during holidays/peak periods only
 **reservationEmail:** Contact email for reservations
 
+**GALA DINNER EXTRACTION PRIORITY:**
+- Scan ALL pricing tables and columns thoroughly
+- Look for special dates like Christmas (24-25 Dec), New Year (31 Dec), holidays
+- Check if All-inclusive or other meal plans have different pricing for specific dates
+- Extract these special date prices as gala dinner events
+
 **QUALITY CONTROL CHECKLIST:**
 □ Scanned entire document for all hotels
 □ Created separate objects for each distinct hotel
@@ -753,7 +759,6 @@ export const extractHotelData = async (
           halfBoard: hotelData.hotelInfo.halfBoard,
           allInclusive: hotelData.hotelInfo.allInclusive,
           surcharge: hotelData.hotelInfo.surcharge,
-
           ...roomCategory
         }));
 

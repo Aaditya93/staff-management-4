@@ -397,6 +397,12 @@ const extractHotelInfo = (uploadedFile) => __awaiter(void 0, void 0, void 0, fun
 **surcharge:** Mandatory additional charges during holidays/peak periods only
 **reservationEmail:** Contact email for reservations
 
+**GALA DINNER EXTRACTION PRIORITY:**
+- Scan ALL pricing tables and columns thoroughly
+- Look for special dates like Christmas (24-25 Dec), New Year (31 Dec), holidays
+- Check if All-inclusive or other meal plans have different pricing for specific dates
+- Extract these special date prices as gala dinner events
+
 **QUALITY CONTROL CHECKLIST:**
 □ Scanned entire document for all hotels
 □ Created separate objects for each distinct hotel
